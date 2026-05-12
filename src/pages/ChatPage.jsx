@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import sampleData from '../data/sampleData';
 import ChatMessage from '../components/ChatMessage';
 import FeedbackModal from '../components/FeedbackModal';
@@ -15,7 +15,6 @@ const ChatPage = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [activeConvIndex, setActiveConvIndex] = useState(null);
   const messagesEndRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
