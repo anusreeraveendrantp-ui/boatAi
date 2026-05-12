@@ -5,7 +5,19 @@ import './HistoryPage.css';
 const HistoryPage = () => {
   const [filterRating, setFilterRating] = useState('all');
 
-  const conversations = JSON.parse(localStorage.getItem('botai_conversations') || '[]');
+  // Read saved conversations and merge in any active (unsaved) session
+  const savedConversations = JSON.parse(localStorage.getItem('botai_conversations') || '[]');
+  const activeSession = JSON.parse(localStorage.getItem('botai_active_session') || 'null');
+
+  // Merge: active session goes first if not already in saved list
+  const allConversations = activeSession
+    ? [
+        activeSession,
+        ...savedConversations.filter((c) => c.id !== activeSession.id),
+      ]
+    : savedConversations;
+
+  const conversations = allConversations;
 
   const filtered = filterRating === 'all'
     ? conversations

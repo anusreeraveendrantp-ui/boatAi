@@ -21,7 +21,10 @@ const ChatPage = () => {
   }, [currentMessages]);
 
   useEffect(() => {
-    localStorage.setItem('botai_conversations', JSON.stringify(conversations));
+    // Only persist when there are conversations to avoid overwriting auto-saved sessions
+    if (conversations.length > 0) {
+      localStorage.setItem('botai_conversations', JSON.stringify(conversations));
+    }
   }, [conversations]);
 
   const getAIResponse = (question) => {
@@ -45,11 +48,30 @@ const ChatPage = () => {
       type: 'bot',
       text: getAIResponse(input.trim()),
       timestamp: new Date().toISOString(),
-      feedback: null, // 'like' | 'dislike' | null
+      feedback: null,
     };
 
-    setCurrentMessages((prev) => [...prev, userMessage, aiResponse]);
+    const updatedMessages = [...currentMessages, userMessage, aiResponse];
+    setCurrentMessages(updatedMessages);
     setInput('');
+
+    // Auto-persist the active session so history page always reflects latest messages
+    const sessionKey = 'botai_active_session';
+    const existing = JSON.parse(localStorage.getItem(sessionKey) || 'null');
+    const session = {
+      id: existing?.id || Date.now(),
+      messages: updatedMessages,
+      rating: null,
+      subjectiveFeedback: '',
+      savedAt: new Date().toISOString(),
+      title: updatedMessages[0]?.text?.slice(0, 40) || 'Conversation',
+    };
+    localStorage.setItem(sessionKey, JSON.stringify(session));
+
+    // Merge active session into botai_conversations for history page
+    const saved = JSON.parse(localStorage.getItem('botai_conversations') || '[]');
+    const withoutActive = saved.filter((c) => c.id !== session.id);
+    localStorage.setItem('botai_conversations', JSON.stringify([session, ...withoutActive]));
   };
 
   const handleLikeDislike = (messageId, feedbackType) => {
@@ -68,23 +90,29 @@ const ChatPage = () => {
   };
 
   const handleFeedbackSubmit = (rating, subjectiveFeedback) => {
+    const activeSession = JSON.parse(localStorage.getItem('botai_active_session') || 'null');
     const newConversation = {
-      id: Date.now(),
+      id: activeSession?.id || Date.now(),
       messages: currentMessages,
       rating,
       subjectiveFeedback,
       savedAt: new Date().toISOString(),
       title: currentMessages[0]?.text?.slice(0, 40) || 'Conversation',
     };
-    setConversations((prev) => [newConversation, ...prev]);
+    setConversations((prev) => {
+      const withoutActive = prev.filter((c) => c.id !== newConversation.id);
+      return [newConversation, ...withoutActive];
+    });
     setCurrentMessages([]);
     setShowFeedbackModal(false);
     setActiveConvIndex(null);
+    localStorage.removeItem('botai_active_session');
   };
 
   const handleNewChat = () => {
     setCurrentMessages([]);
     setActiveConvIndex(null);
+    localStorage.removeItem('botai_active_session');
   };
 
   const handleLoadConversation = (index) => {
@@ -134,9 +162,7 @@ const ChatPage = () => {
       {/* Main Chat Area */}
       <main className="chat-main">
         <header className="chat-header">
-          <span className="chat-header-title">
-            <span className="soul-ai-label"><span>Soul AI</span></span>
-          </span>
+          <h1 className="chat-header-title">Bot AI</h1>
           {!isViewingHistory && currentMessages.length > 0 && (
             <button
               type="button"

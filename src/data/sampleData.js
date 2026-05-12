@@ -17,7 +17,11 @@ const sampleData = {
   "what is the weather": "I don't have access to real-time weather data, but you can check weather.com or your local weather app for updates.",
   "tell me a fact": "Did you know? Honey never spoils. Archaeologists have found 3000-year-old honey in Egyptian tombs that was still perfectly edible!",
   "what is the meaning of life": "That's a profound question! Many philosophers believe it's about finding purpose, happiness, and connection with others.",
-  "help": "Sure! You can ask me anything — general knowledge, tech questions, jokes, or just have a conversation. I'm here to help!"
+  "help": "Sure! You can ask me anything — general knowledge, tech questions, jokes, or just have a conversation. I'm here to help!",
+  "what are restful apis": "RESTful APIs are designed around the REST (Representational State Transfer) architecture, which uses HTTP requests to access and manipulate data. They follow a stateless, client-server, cacheable communications protocol.",
+  "what is a restful api": "RESTful APIs are designed around the REST (Representational State Transfer) architecture, which uses HTTP requests to access and manipulate data. They follow a stateless, client-server, cacheable communications protocol.",
+  "what is restful api": "RESTful APIs are designed around the REST (Representational State Transfer) architecture, which uses HTTP requests to access and manipulate data. They follow a stateless, client-server, cacheable communications protocol.",
+  "explain restful apis": "RESTful APIs are designed around the REST (Representational State Transfer) architecture, which uses HTTP requests to access and manipulate data. They follow a stateless, client-server, cacheable communications protocol."
 };
 
 export default sampleData;
