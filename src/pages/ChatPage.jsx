@@ -15,20 +15,22 @@ const ChatPage = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [activeConvIndex, setActiveConvIndex] = useState(null);
   const messagesEndRef = useRef(null);
+  // Track whether conversations state was changed by user actions (not initial load)
+  const isUserAction = useRef(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [currentMessages]);
 
   useEffect(() => {
-    // Only persist when there are conversations to avoid overwriting auto-saved sessions
-    if (conversations.length > 0) {
+    // Only persist when conversations were changed by a user action, not initial load
+    if (isUserAction.current) {
       localStorage.setItem('botai_conversations', JSON.stringify(conversations));
     }
   }, [conversations]);
 
   const getAIResponse = (question) => {
-    const key = question.toLowerCase().trim();
+    const key = question.toLowerCase().trim().replace(/[?!.,]+$/, '');
     return sampleData[key] || "Sorry, Did not understand your query!";
   };
 
@@ -99,6 +101,7 @@ const ChatPage = () => {
       savedAt: new Date().toISOString(),
       title: currentMessages[0]?.text?.slice(0, 40) || 'Conversation',
     };
+    isUserAction.current = true;
     setConversations((prev) => {
       const withoutActive = prev.filter((c) => c.id !== newConversation.id);
       return [newConversation, ...withoutActive];
