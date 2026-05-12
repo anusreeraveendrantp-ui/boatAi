@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './HistoryPage.css';
 
 const HistoryPage = () => {
-  const navigate = useNavigate();
   const [filterRating, setFilterRating] = useState('all');
 
   const conversations = JSON.parse(localStorage.getItem('botai_conversations') || '[]');
@@ -29,9 +28,9 @@ const HistoryPage = () => {
   return (
     <div className="history-layout">
       <header className="history-header">
-        <button className="back-btn" onClick={() => navigate('/')}>
+        <Link to="/" className="back-btn">
           ← Back to Chat
-        </button>
+        </Link>
         <h1 className="history-title">Conversation History</h1>
         <div className="filter-group">
           <label className="filter-label">Filter by Rating:</label>

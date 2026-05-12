@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import sampleData from '../data/sampleData';
 import ChatMessage from '../components/ChatMessage';
 import FeedbackModal from '../components/FeedbackModal';
@@ -103,9 +103,9 @@ const ChatPage = () => {
           <span className="logo-text">Bot AI</span>
         </div>
 
-        <button className="new-chat-btn" onClick={handleNewChat}>
+        <Link to="/" className="new-chat-btn" onClick={handleNewChat}>
           + New Chat
-        </button>
+        </Link>
 
         <div className="sidebar-section-title">Recent Conversations</div>
 
@@ -126,15 +126,15 @@ const ChatPage = () => {
         </div>
 
         <div className="sidebar-footer">
-          <button className="history-btn" onClick={() => navigate('/history')}>
+          <Link to="/history" className="history-btn">
             Past Conversations
-          </button>
+          </Link>
         </div>
       </aside>
 
       {/* Main Chat Area */}
       <main className="chat-main">
-        <div className="chat-header">
+        <header className="chat-header">
           <span className="chat-header-title">
             <span className="soul-ai-label"><span>Soul AI</span></span>
           </span>
@@ -152,7 +152,7 @@ const ChatPage = () => {
               <span>⭐ {conversations[activeConvIndex]?.rating}/5</span>
             </div>
           )}
-        </div>
+        </header>
 
         <div className="messages-container">
           {currentMessages.length === 0 && !isViewingHistory && (
@@ -189,7 +189,7 @@ const ChatPage = () => {
             <input
               type="text"
               className="chat-input"
-              placeholder="Message Bot AI…"
+              placeholder="Message Bot AI..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
