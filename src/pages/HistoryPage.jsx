@@ -43,7 +43,7 @@ const HistoryPage = () => {
         <Link to="/" className="back-btn">
           ← Back to Chat
         </Link>
-        <h1 className="history-title">Conversation History</h1>
+        <h1 className="history-title">Past Conversations</h1>
         <div className="filter-group">
           <label className="filter-label">Filter by Rating:</label>
           <select

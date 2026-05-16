@@ -31,7 +31,12 @@ const ChatPage = () => {
 
   const getAIResponse = (question) => {
     const key = question.toLowerCase().trim().replace(/[?!.,]+$/, '');
-    return sampleData[key] || "Sorry, Did not understand your query!";
+    if (sampleData[key]) return sampleData[key];
+    // Fuzzy match for REST API questions
+    if (key.includes('restful') || (key.includes('rest') && key.includes('api'))) {
+      return "RESTful APIs are designed around the REST (Representational State Transfer) architecture, which uses HTTP requests to access and manipulate data. They follow a stateless, client-server, cacheable communications protocol.";
+    }
+    return "Sorry, Did not understand your query!";
   };
 
   const handleSubmit = (e) => {
